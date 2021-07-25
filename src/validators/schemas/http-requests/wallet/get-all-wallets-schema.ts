@@ -1,12 +1,15 @@
 import joi from 'joi';
 
 import { Currencies, Wallet } from '../../../../constants';
-import { IWalletInput } from '../../../../entities/wallet/wallet.types';
 import { floatNumberRegex } from '../../../../utils/regex';
 import joiValidator from '../../../index';
+import { GetAllWallets } from '../../../types/wallet';
+import { getAllSchema, idSchema } from '../sub-schemas';
 
-const createWalletSchema = joi
-  .object({
+const getAllWalletsSchema = joi
+  .object(getAllSchema)
+  .append({
+    ...idSchema,
     [Wallet.Currency]: joi
       .string()
       .valid(...Object.values(Currencies))
@@ -19,4 +22,4 @@ const createWalletSchema = joi
   .required()
   .unknown(false);
 
-export default joiValidator<IWalletInput>(createWalletSchema);
+export default joiValidator<GetAllWallets>(getAllWalletsSchema);
