@@ -21,8 +21,8 @@ export function makeGetAllEntities<T>({ model, options }: MakeGetAllEntityData<T
       attributes: options.projection,
       where: includeDeleted ? { ...formattedQuery } : { isDeleted: false, ...formattedQuery },
       order: Object.keys(sortByParsed).map(key => [key, sortByParsed[key] === -1 ? 'DESC' : 'ASC']),
-      limit: skip,
-      offset: docPerPage || 15,
+      limit: docPerPage || 15,
+      offset: skip,
       include: options.include,
     });
 

@@ -1,12 +1,21 @@
-import { ModelAttributes, ModelOptions, Sequelize } from 'sequelize';
-
-import { logger } from '../../../../utils';
+import { ConnectionError, ModelAttributes, ModelOptions, Sequelize } from 'sequelize';
 
 let sequelize: Sequelize | undefined;
 
 export const PostgreHelper = {
   async connect(): Promise<void> {
-    sequelize = new Sequelize(process.env.POSTGRES_URI!);
+    const connectionStr = `${process.env.DATABASE_DIALECT}://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}/${process.env.DATABASE_CATALOG}`;
+
+    try {
+      sequelize = new Sequelize(connectionStr);
+    } catch (error) {
+      if (error instanceof ConnectionError) {
+        // Retries the connection attempt every 5 seconds
+        setTimeout(() => {
+          sequelize = new Sequelize(connectionStr);
+        }, 5000);
+      }
+    }
   },
   getModel(name: string, schema: ModelAttributes, options?: ModelOptions) {
     return sequelize?.models[name] ?? sequelize.define(name, schema, options);
@@ -18,15 +27,4 @@ export async function queryGuard<T = any>(fn: any): Promise<T> {
   if (!data) throw new Error();
 
   return data;
-}
-
-if (!sequelize) {
-  PostgreHelper.connect()
-    .then()
-    .catch(error => {
-      logger.error(error);
-      if (process.env.NODE_ENV !== 'test') {
-        process.exit(1);
-      }
-    });
 }

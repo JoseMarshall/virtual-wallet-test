@@ -15,7 +15,7 @@ const walletSchema: ModelAttributes = {
     allowNull: false,
   },
   [Wallet.Currency]: {
-    type: DataTypes.STRING(),
+    type: DataTypes.STRING(3),
     allowNull: false,
     defaultValue: Currencies.BRL,
     values: Object.values(Currencies),
