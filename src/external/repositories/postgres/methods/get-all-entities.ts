@@ -4,13 +4,8 @@ import { MakeGetAllEntityData } from '../postgres.types';
 
 // eslint-disable-next-line import/prefer-default-export
 export function makeGetAllEntities<T>({ model, options }: MakeGetAllEntityData<T>) {
-  return async (query: {
-    page: string;
-    limit?: string;
-    sortBy?: string;
-    includeDeleted?: string;
-  }) => {
-    const { page, limit, sortBy, includeDeleted, ...filteredQuery } = query;
+  return async (query: { page: string; limit?: string; sortBy?: string }) => {
+    const { page, limit, sortBy, ...filteredQuery } = query;
     const pageNumber = safeParseInt(page, 10);
     const docPerPage = safeParseInt(limit ?? '0', 10);
     const skip = docPerPage > 0 ? docPerPage * (pageNumber - 1) : 0;
@@ -19,7 +14,7 @@ export function makeGetAllEntities<T>({ model, options }: MakeGetAllEntityData<T
 
     const documents = await model.findAndCountAll({
       attributes: options.projection,
-      where: includeDeleted ? { ...formattedQuery } : { isDeleted: false, ...formattedQuery },
+      where: { isDeleted: false, ...formattedQuery },
       order: Object.keys(sortByParsed).map(key => [key, sortByParsed[key] === -1 ? 'DESC' : 'ASC']),
       limit: docPerPage || 15,
       offset: skip,

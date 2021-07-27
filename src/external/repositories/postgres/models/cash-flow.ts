@@ -1,15 +1,20 @@
 import { DataTypes, ModelAttributes } from 'sequelize';
 
-import { CashFlow, CollectionNames, Common, TimeStamps } from '../../../../constants';
+import { CashFlow, CollectionNames, Common } from '../../../../constants';
 import { PostgreHelper } from '../helpers/pg-helper';
+import { entitySchema } from './sub-schemas';
 
 const cashFlowSchema: ModelAttributes = {
-  [Common.Id]: {
+  ...entitySchema,
+  [CashFlow.Sender]: {
     type: DataTypes.STRING(36),
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
+    references: {
+      key: Common.Id,
+      model: CollectionNames.Wallets,
+    },
+    allowNull: false,
   },
-  [CashFlow.WalletId]: {
+  [CashFlow.Receiver]: {
     type: DataTypes.STRING(36),
     references: {
       key: Common.Id,
@@ -25,38 +30,9 @@ const cashFlowSchema: ModelAttributes = {
     },
     allowNull: false,
   },
-  [CashFlow.TransactionId]: {
-    type: DataTypes.STRING(36),
-    references: {
-      key: Common.Id,
-      model: CollectionNames.Transactions,
-    },
-    allowNull: false,
-  },
-  [CashFlow.Debit]: {
+  [CashFlow.Value]: {
     type: DataTypes.DECIMAL(10, 2),
     defaultValue: 0,
-    allowNull: false,
-  },
-  [CashFlow.Credit]: {
-    type: DataTypes.DECIMAL(10, 2),
-    defaultValue: 0,
-    allowNull: false,
-  },
-  [CashFlow.Obs]: {
-    type: DataTypes.STRING(),
-  },
-  [TimeStamps.CreatedAt]: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
-  [TimeStamps.UpdatedAt]: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
-  [Common.IsDeleted]: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
     allowNull: false,
   },
 };

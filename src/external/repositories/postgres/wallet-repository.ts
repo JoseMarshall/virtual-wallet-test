@@ -2,11 +2,12 @@ import { ApiErrorsName, ApiErrorsType } from '../../../constants/errors';
 import { IWallet } from '../../../entities/wallet/wallet.types';
 import apiMessages from '../../../locales/pt/api-server.json';
 import CustomError from '../../../utils/custom-error';
-import { IGetAllQuery, IWalletRepository } from '../repository.types';
+import { GetAllWallets, GetOneWallet } from '../../../validators/types/wallet';
+import { IWalletRepository } from '../repository.types';
 import { makeCreateEntity, makeGetAllEntities, makeGetOneEntity } from './methods';
 import { WalletModel } from './models';
 
-async function findAllWallets(query: IGetAllQuery) {
+async function findAllWallets(query: GetAllWallets) {
   try {
     return makeGetAllEntities<IWallet>({ model: WalletModel, options: {} })(query);
   } catch (error) {
@@ -22,9 +23,9 @@ async function findAllWallets(query: IGetAllQuery) {
   }
 }
 
-async function findWalletById(id: string) {
+async function findOne(query: GetOneWallet) {
   try {
-    return makeGetOneEntity<IWallet>({ model: WalletModel, options: {} })({ id });
+    return makeGetOneEntity<IWallet>({ model: WalletModel, options: {} })(query);
   } catch (error) {
     throw new CustomError({
       statusCode: 404,
@@ -57,6 +58,6 @@ async function save(wallet: IWallet) {
 // eslint-disable-next-line import/prefer-default-export
 export const walletRepository: IWalletRepository = {
   findAllWallets,
-  findWalletById,
+  findOne,
   save,
 };

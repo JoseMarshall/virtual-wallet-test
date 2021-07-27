@@ -22,7 +22,7 @@ export const PostgreHelper = {
   },
 };
 
-export async function queryGuard<T = any>(fn: any): Promise<T> {
+export async function queryGuard<T = any>(fn: Promise<T>) {
   const data = await fn;
   if (!data) throw new Error();
 
