@@ -1,12 +1,9 @@
-import { Common, TimeStamps, Wallet } from '../../constants';
+import { Wallet } from '../../constants';
+import { Entity } from '../entity.types';
 
-export interface IWallet {
-  [Common.Id]: string;
+export interface IWallet extends Entity {
   [Wallet.Currency]: string;
   [Wallet.CurrentValue]: number;
-  [TimeStamps.CreatedAt]: string;
-  [TimeStamps.UpdatedAt]: string;
-  [Common.IsDeleted]: boolean;
 }
 
-export type IWalletInput = Pick<IWallet, Wallet.Currency | Wallet.CurrentValue>;
+export type IWalletInput = Omit<IWallet, keyof Entity>;

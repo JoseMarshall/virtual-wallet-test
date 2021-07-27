@@ -4,23 +4,15 @@ export enum Wallet {
 }
 
 export enum CashFlow {
-  WalletId = 'walletId',
-  CategoryId = 'categoryId',
-  TransactionId = 'transactionId',
-  Debit = 'debit',
-  Credit = 'credit',
-  Obs = 'obs',
-}
-
-export enum Transaction {
   Sender = 'sender',
   Receiver = 'receiver',
   Value = 'value',
+  CategoryId = 'categoryId',
 }
 
 export enum CollectionNames {
   Wallets = 'wallets',
   CashFlows = 'cashFlows',
   CashFlowCategories = 'cashFlowsCategories',
-  Transactions = 'transactions',
+  CashFlowObservations = 'cashFlowsObservations',
 }

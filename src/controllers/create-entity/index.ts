@@ -1,6 +1,6 @@
 import apiMessages from '../../locales/pt/api-server.json';
 import { HttpRequest } from '../controllers.types';
-import { MakeCreateOneEntityDependencies } from './create-one-entity.types';
+import { MakeCreateOneEntityDependencies } from './create-entity.types';
 
 function makeCreateOneEntityController<D, K>({
   create,

@@ -1,5 +1,6 @@
 import joi from 'joi';
 
+import { Common } from '../../../../constants';
 import { limitQueryRegex, pageQueryRegex, sortByStringfiedRegex } from '../../../../utils/regex';
 
 export const getAllSchema = {
@@ -9,5 +10,5 @@ export const getAllSchema = {
 };
 
 export const idSchema = {
-  id: joi.string().uuid({ version: 'uuidv4' }).required(),
+  [Common.Id]: joi.string().uuid({ version: 'uuidv4' }).required(),
 };

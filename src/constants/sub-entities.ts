@@ -12,6 +12,11 @@ export enum CashFlowCategory {
   Name = 'name',
 }
 
+export enum CashFlowObservation {
+  Description = 'description',
+  CashFlowId = 'cashFlowId',
+}
+
 export enum Currencies {
   AED = 'AED',
   AFN = 'AFN',

@@ -1,14 +1,11 @@
 import { DataTypes, ModelAttributes } from 'sequelize';
 
-import { CollectionNames, Common, Currencies, TimeStamps, Wallet } from '../../../../constants';
+import { CollectionNames, Currencies, Wallet } from '../../../../constants';
 import { PostgreHelper } from '../helpers/pg-helper';
+import { entitySchema } from './sub-schemas';
 
 const walletSchema: ModelAttributes = {
-  [Common.Id]: {
-    type: DataTypes.STRING(36),
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
-  },
+  ...entitySchema,
   [Wallet.CurrentValue]: {
     type: DataTypes.DECIMAL(10, 2),
     defaultValue: 0,
@@ -19,19 +16,6 @@ const walletSchema: ModelAttributes = {
     allowNull: false,
     defaultValue: Currencies.BRL,
     values: Object.values(Currencies),
-  },
-  [TimeStamps.CreatedAt]: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
-  [TimeStamps.UpdatedAt]: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
-  [Common.IsDeleted]: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-    allowNull: false,
   },
 };
 

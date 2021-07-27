@@ -1,4 +1,4 @@
-import makeCreateEntityController from '../../../controllers/create-one-entity';
+import makeCreateEntityController from '../../../controllers/create-entity';
 import { IWallet, IWalletInput } from '../../../entities/wallet/wallet.types';
 import { walletRepository } from '../../../external/repositories/postgres/wallet-repository';
 import { makeCreateWalletUC } from '../../../usecases/create-wallet';

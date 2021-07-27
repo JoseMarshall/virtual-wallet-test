@@ -6,7 +6,7 @@ export interface UpdateWallet {
     [Wallet.Currency]?: string;
     [Wallet.CurrentValue]?: string;
   };
-  query: { [Common.Id]: string };
+  params: { [Common.Id]: string };
 }
 
 export interface GetAllWallets extends GetAll {
