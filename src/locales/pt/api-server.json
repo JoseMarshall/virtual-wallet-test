@@ -25,5 +25,6 @@
   "S-3005": "Token validado com sucesso!",
   "S-3006": "Palavra-passe reiniciada com sucesso!",
   "S-3007": "Por favor, verifique a sua caixa de entrada se recebeu o email com o link de recuperação da palavra-passe",
-  "S-3008": "Palavra-passe actualizada com sucesso!"
+  "S-3008": "Palavra-passe actualizada com sucesso!",
+  "W-2000": "Fundos insuficientes"
 }

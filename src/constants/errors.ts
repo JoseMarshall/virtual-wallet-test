@@ -19,7 +19,7 @@ export enum ApiErrorsType {
   EmailError = 'EMAIL_ERROR',
   TotalCollectionError = 'TOTAL_COLLECTION_ERROR',
   S3BucketError = 'S3_BUCKET_ERROR',
-  PlafondError = 'PLAFOND_ERROR',
+  FundsError = 'FUNDS_ERROR',
   UpdateProcessError = 'UPDATE_CLAIM_ERROR',
 }
 export type ApiErrorsStatusCode =
