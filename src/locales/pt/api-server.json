@@ -8,7 +8,6 @@
   "E-1006": "Falha ao criar a entidade, provavelmente devido à algum dado mal introduzido, por favor verifique os dados do seu formulário",
   "E-1007": "Falha ao eliminar a entidade",
   "E-1008": "Falha ao buscar o recurso, isso pode dever-se à parâmetros de busca mal introduzidos",
-  "E-1009": "Falha ao buscar o recurso, isso pode dever-se à parâmetros de busca mal introduzidos",
   "E-1010": "Token inválido",
   "E-1011": "Falha ao reiniciar a palavra passe",
   "E-1012": "Falha ao recuperar a palavra passe",

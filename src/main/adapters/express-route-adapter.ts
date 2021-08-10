@@ -6,7 +6,6 @@ import apiMessages from '../../locales/pt/api-server.json';
 import { makeMsgBody } from '../../utils';
 import CustomError from '../../utils/custom-error';
 
-// eslint-disable-next-line import/prefer-default-export
 export const adaptExpressRoute =
   (controller: Controller) => async (req: Request, res: Response) => {
     try {
