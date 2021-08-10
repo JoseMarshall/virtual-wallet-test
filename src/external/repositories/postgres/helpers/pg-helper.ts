@@ -20,6 +20,10 @@ export const PostgreHelper = {
   getModel(name: string, schema: ModelAttributes, options?: ModelOptions) {
     return sequelize?.models[name] ?? sequelize.define(name, schema, options);
   },
+
+  getInstance() {
+    return sequelize;
+  },
 };
 
 export async function queryGuard<T = any>(fn: Promise<T>) {

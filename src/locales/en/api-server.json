@@ -25,5 +25,6 @@
   "S-3005": "Token successfully validated!",
   "S-3006": "Password reset successfully!",
   "S-3007": "Please check your inbox if you received the email with the password recovery link",
-  "S-3008": "Password updated successfully!"
+  "S-3008": "Password updated successfully!",
+  "W-2000": "Insufficient funds!"
 }
