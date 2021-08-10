@@ -28,7 +28,7 @@ const cashFlowSchema: ModelAttributes = {
       key: Common.Id,
       model: CollectionNames.CashFlowCategories,
     },
-    allowNull: false,
+    allowNull: true,
   },
   [CashFlow.Value]: {
     type: DataTypes.DECIMAL(10, 2),
@@ -43,7 +43,7 @@ const cashFlowModel = PostgreHelper.getModel(CollectionNames.CashFlows, cashFlow
 });
 
 (async () => {
-  await cashFlowModel.sync({ alter: process.env.NODE_ENV !== 'production' });
+  await cashFlowModel.sync({ alter: process.env.NODE_ENV !== 'production', logging: false });
 })();
 
 export default cashFlowModel;

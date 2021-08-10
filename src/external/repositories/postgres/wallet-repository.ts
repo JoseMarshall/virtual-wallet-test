@@ -54,25 +54,31 @@ function WalletRepository(transaction: Transaction): IWalletRepository {
         : { enough: false, missingAmount: Number(amountDiff[0]) };
     },
     async transferAmount(data: ITansferAmount) {
-      await queryGuard(
-        WalletModel.increment<any>(
-          { [Wallet.CurrentValue]: -Number(data.value) },
-          {
-            where: { id: data.sender, isDeleted: false },
-            transaction,
-          }
+      const sending = (
+        await queryGuard<[[IWallet[], number]]>(
+          WalletModel.increment<any>(
+            { [Wallet.CurrentValue]: -Number(data.value) },
+            {
+              where: { id: data.sender, isDeleted: false },
+              transaction,
+            }
+          )
         )
-      );
+      )[0][0][0];
 
-      await queryGuard(
-        WalletModel.increment<any>(
-          { [Wallet.CurrentValue]: Number(data.value) },
-          {
-            where: { id: data.receiver, isDeleted: false },
-            transaction,
-          }
+      const receiving = (
+        await queryGuard<[[IWallet[], number]]>(
+          WalletModel.increment<any>(
+            { [Wallet.CurrentValue]: Number(data.value) },
+            {
+              where: { id: data.receiver, isDeleted: false },
+              transaction,
+            }
+          )
         )
-      );
+      )[0][0][0];
+
+      return sending.currency !== receiving.currency;
     },
   };
   return repository;

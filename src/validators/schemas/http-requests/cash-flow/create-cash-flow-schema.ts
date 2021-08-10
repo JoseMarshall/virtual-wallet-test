@@ -9,7 +9,7 @@ const createCashFlowSchema = joi
   .object({
     [CashFlow.Sender]: joi.string().uuid({ version: 'uuidv4' }).required(),
     [CashFlow.Receiver]: joi.string().uuid({ version: 'uuidv4' }).required(),
-    [CashFlow.CategoryId]: joi.string().uuid({ version: 'uuidv4' }).required(),
+    [CashFlow.CategoryId]: joi.string().uuid({ version: 'uuidv4' }),
     [CashFlow.Value]: joi
       .alternatives()
       .try(joi.number().options({ convert: false }), joi.string().pattern(floatNumberRegex))

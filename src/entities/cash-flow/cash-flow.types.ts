@@ -5,7 +5,7 @@ export interface ICashFlow extends Entity {
   [CashFlow.Sender]: string;
   [CashFlow.Receiver]: string;
   [CashFlow.Value]: string;
-  [CashFlow.CategoryId]: string;
+  [CashFlow.CategoryId]?: string;
 }
 
 export type ICashFlowInput = Omit<ICashFlow, keyof Entity>;

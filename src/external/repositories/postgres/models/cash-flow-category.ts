@@ -22,7 +22,10 @@ const cashFlowCategoryModel = PostgreHelper.getModel(
 );
 
 (async () => {
-  await cashFlowCategoryModel.sync({ alter: process.env.NODE_ENV !== 'production' });
+  await cashFlowCategoryModel.sync({
+    alter: process.env.NODE_ENV !== 'production',
+    logging: false,
+  });
 })();
 
 export default cashFlowCategoryModel;

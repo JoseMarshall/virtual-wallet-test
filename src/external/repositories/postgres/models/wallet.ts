@@ -25,7 +25,7 @@ const walletModel = PostgreHelper.getModel(CollectionNames.Wallets, walletSchema
 });
 
 (async () => {
-  await walletModel.sync({ alter: process.env.NODE_ENV !== 'production' });
+  await walletModel.sync({ alter: process.env.NODE_ENV !== 'production', logging: false });
 })();
 
 export default walletModel;

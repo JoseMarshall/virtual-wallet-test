@@ -38,11 +38,11 @@ export interface IWalletRepository extends IRepository<IWallet> {
     value: string
   ): Promise<{ enough: boolean; missingAmount: number }>;
 
-  transferAmount(data: ITansferAmount): Promise<void>;
+  transferAmount(data: ITansferAmount): Promise<boolean>;
 }
 
 export interface IUnitOfWork {
-  transaction?: Transaction;
+  transaction: Transaction | null;
   makeWalletRepository: () => IWalletRepository;
   makeCashFlowRepository: () => IRepository<ICashFlow>;
   makeCashFlowObservationRepository: () => IRepository<ICashFlowObservation>;
