@@ -30,7 +30,10 @@ const cashFlowObservationModel = PostgreHelper.getModel(
 );
 
 (async () => {
-  await cashFlowObservationModel.sync({ alter: process.env.NODE_ENV !== 'production' });
+  await cashFlowObservationModel.sync({
+    alter: process.env.NODE_ENV !== 'production',
+    logging: false,
+  });
 })();
 
 export default cashFlowObservationModel;
