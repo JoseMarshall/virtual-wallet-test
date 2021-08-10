@@ -3,7 +3,7 @@ import { Transaction } from 'sequelize';
 
 import { Wallet } from '../../../constants';
 import { Entity } from '../../../entities/entity.types';
-import { ITansferAmount, IWallet, IWallet } from '../../../entities/wallet/wallet.types';
+import { ITansferAmount, IWallet } from '../../../entities/wallet/wallet.types';
 import { GetAll, GetOne } from '../../../validators/types/sub-types';
 import { IWalletRepository } from '../repository.types';
 import { queryGuard } from './helpers/pg-helper';
