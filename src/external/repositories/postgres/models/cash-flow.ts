@@ -28,7 +28,7 @@ const cashFlowSchema: ModelAttributes = {
       key: Common.Id,
       model: CollectionNames.CashFlowCategories,
     },
-    allowNull: false,
+    allowNull: true,
   },
   [CashFlow.Value]: {
     type: DataTypes.DECIMAL(10, 2),

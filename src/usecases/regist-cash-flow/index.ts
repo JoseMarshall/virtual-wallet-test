@@ -27,15 +27,31 @@ export function makeCashFlowUC() {
           message: apiMessages['W-2000'],
           i18nCode: 'W-2000',
           stack: new Error().stack,
-          details: { msg: 'You have not enough funds to complete this operation' },
+          details: {
+            ...walletFundsCalculated,
+            msg: 'You have not enough funds to complete this operation',
+          },
         });
       }
 
-      walletRepo.transferAmount({
+      const predicateTransfering = await walletRepo.transferAmount({
         receiver: data.receiver,
         sender: data.sender,
         value: data.value,
       });
+
+      if (predicateTransfering) {
+        throw new CustomError({
+          statusCode: 402,
+          name: ApiErrorsName.GenericName,
+          type: ApiErrorsType.FundsError,
+          message: apiMessages['W-2001'],
+          i18nCode: 'W-2001',
+          stack: new Error().stack,
+          details: { msg: 'You cannot transfer money to accounts that is in a different currency' },
+        });
+      }
+
       const createdCashFlow = await cashFlowRepo.add(makeCashFlow(data));
       await unitOfWork.commitChanges();
 
@@ -43,6 +59,7 @@ export function makeCashFlowUC() {
         payload: createdCashFlow,
       };
     } catch (error) {
+      await unitOfWork.rollback();
       throw error instanceof CustomError
         ? error
         : new CustomError({

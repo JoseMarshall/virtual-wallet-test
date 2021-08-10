@@ -6,7 +6,7 @@ import WalletRepository from './wallet-repository';
 
 async function UnitOfWork() {
   const uow: IUnitOfWork = {
-    transaction: undefined,
+    transaction: null,
     makeWalletRepository() {
       return WalletRepository(this.transaction);
     },
@@ -20,10 +20,10 @@ async function UnitOfWork() {
       return BaseRepository(CashFlowCategoryModel, this.transaction);
     },
     commitChanges() {
-      return this.transaction.commit;
+      return this.transaction.commit();
     },
     rollback() {
-      return this.transaction.rollback;
+      return this.transaction.rollback();
     },
     async startTransaction() {
       this.transaction = await PostgreHelper.getInstance().transaction();
