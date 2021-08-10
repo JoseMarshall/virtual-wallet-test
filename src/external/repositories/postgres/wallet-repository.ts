@@ -1,63 +1,81 @@
-import { ApiErrorsName, ApiErrorsType } from '../../../constants/errors';
-import { IWallet } from '../../../entities/wallet/wallet.types';
-import apiMessages from '../../../locales/pt/api-server.json';
-import CustomError from '../../../utils/custom-error';
-import { GetAllWallets, GetOneWallet } from '../../../validators/types/wallet';
+import BigMoneyFactory from 'bigint-money';
+import { Transaction } from 'sequelize';
+
+import { Wallet } from '../../../constants';
+import { Entity } from '../../../entities/entity.types';
+import { ITansferAmount, IWallet } from '../../../entities/wallet/wallet.types';
+import { GetAll, GetOne } from '../../../validators/types/sub-types';
 import { IWalletRepository } from '../repository.types';
-import { makeCreateEntity, makeGetAllEntities, makeGetOneEntity } from './methods';
+import { queryGuard } from './helpers/pg-helper';
+import {
+  makeCreateEntity,
+  makeCreateManyEntities,
+  makeDeleteOneEntity,
+  makeGetAllEntities,
+  makeGetOneEntity,
+  makeUpdateOneEntity,
+} from './methods';
 import { WalletModel } from './models';
 
-async function findAllWallets(query: GetAllWallets) {
-  try {
-    return makeGetAllEntities<IWallet>({ model: WalletModel, options: {} })(query);
-  } catch (error) {
-    throw new CustomError({
-      statusCode: 422,
-      name: ApiErrorsName.GenericName,
-      type: ApiErrorsType.GenericType,
-      message: apiMessages['E-1008'],
-      i18nCode: 'E-1008',
-      stack: error.stack,
-      details: error,
-    });
-  }
+function WalletRepository(transaction: Transaction): IWalletRepository {
+  const repository: IWalletRepository = {
+    async add(entity: IWallet) {
+      return makeCreateEntity<IWallet>({ model: WalletModel, transaction })(entity);
+    },
+    async addRange(entities: IWallet[]) {
+      return makeCreateManyEntities<IWallet>({ model: WalletModel, transaction })(entities);
+    },
+    async get(query: GetOne, options: Record<string, any>) {
+      return makeGetOneEntity<IWallet>({ model: WalletModel, options })(query);
+    },
+    async getAll(query: GetAll, options: Record<string, any>) {
+      return makeGetAllEntities<IWallet>({ model: WalletModel, options })(query);
+    },
+    async remove(query: GetOne) {
+      return makeDeleteOneEntity({ model: WalletModel, transaction })(query);
+    },
+    async update(query: GetOne, body: Omit<Record<string, any>, keyof Entity>) {
+      return makeUpdateOneEntity<IWallet>({ model: WalletModel, transaction })(query, body);
+    },
+    async hasWalletEnoughFunds(query: GetOne, value: string) {
+      const wallet = await queryGuard<IWallet>(
+        WalletModel.findOne<any>({
+          where: { id: query.id, isDeleted: false },
+          attributes: [Wallet.CurrentValue, Wallet.Currency],
+        })
+      );
+
+      const amountDiff = new BigMoneyFactory(wallet.currentValue.toString(), wallet.currency)
+        .subtract(value.toString())
+        .toJSON();
+
+      return Number(amountDiff[0]) >= 0
+        ? { enough: true, missingAmount: 0 }
+        : { enough: false, missingAmount: Number(amountDiff[0]) };
+    },
+    async transferAmount(data: ITansferAmount) {
+      await queryGuard(
+        WalletModel.increment<any>(
+          { [Wallet.CurrentValue]: -Number(data.value) },
+          {
+            where: { id: data.sender, isDeleted: false },
+            transaction,
+          }
+        )
+      );
+
+      await queryGuard(
+        WalletModel.increment<any>(
+          { [Wallet.CurrentValue]: Number(data.value) },
+          {
+            where: { id: data.receiver, isDeleted: false },
+            transaction,
+          }
+        )
+      );
+    },
+  };
+  return repository;
 }
 
-async function findOne(query: GetOneWallet) {
-  try {
-    return makeGetOneEntity<IWallet>({ model: WalletModel, options: {} })(query);
-  } catch (error) {
-    throw new CustomError({
-      statusCode: 404,
-      name: ApiErrorsName.GenericName,
-      type: ApiErrorsType.GenericType,
-      message: apiMessages['E-1009'],
-      i18nCode: 'E-1009',
-      stack: error.stack,
-      details: error,
-    });
-  }
-}
-
-async function save(wallet: IWallet) {
-  try {
-    return makeCreateEntity<IWallet>({ model: WalletModel })(wallet);
-  } catch (error) {
-    throw new CustomError({
-      statusCode: 422,
-      name: ApiErrorsName.MissingFields,
-      type: ApiErrorsType.ValidationError,
-      message: apiMessages['E-1006'],
-      i18nCode: 'E-1006',
-      stack: error.stack,
-      details: error,
-    });
-  }
-}
-
-// eslint-disable-next-line import/prefer-default-export
-export const walletRepository: IWalletRepository = {
-  findAllWallets,
-  findOne,
-  save,
-};
+export default WalletRepository;

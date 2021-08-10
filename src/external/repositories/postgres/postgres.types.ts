@@ -1,6 +1,4 @@
-import { Includeable, ModelCtor } from 'sequelize';
-
-import { Common, TimeStamps } from '../../../constants';
+import { Includeable, ModelCtor, Transaction } from 'sequelize';
 
 export interface MakeGetAllEntitiesDependencies<K> {
   projection?: string[];
@@ -15,11 +13,6 @@ export interface MakeGetOneEntityDependencies<K> {
   formatData?: (data: any) => K;
 }
 
-export interface GetAllEntitiesData<T> {
-  data: ReadonlyArray<T>;
-  count: number;
-}
-
 export interface MakeGetOneEntityData<K> {
   model: ModelCtor<any>;
   options: MakeGetOneEntityDependencies<K>;
@@ -32,19 +25,15 @@ export interface MakeGetAllEntityData<K> {
 
 export interface MakeUpdateOneEntityData {
   model: ModelCtor<any>;
+  transaction: Transaction;
 }
 
 export interface MakeCreateEntityData {
   model: ModelCtor<any>;
+  transaction: Transaction;
 }
 
 export interface MakeDeleteOneEntityData {
   model: ModelCtor<any>;
-}
-
-export interface DeletedEntity {
-  [Common.Id]: string;
-  [Common.IsDeleted]: boolean;
-  [TimeStamps.CreatedAt]: string;
-  [TimeStamps.UpdatedAt]: string;
+  transaction: Transaction;
 }
